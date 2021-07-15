@@ -8,6 +8,7 @@ let playerOneScore = document.getElementById('player-one-score');
 let playerTwoScore = document.getElementById('player-two-score');
 let playersTurn = document.getElementById('players-turn');
 let gameInfo = document.getElementById('game-info');
+let restartGameButton = document.getElementById('restart');
 
 let columnNumber = 7;
 let rowNumber = 6;
@@ -30,21 +31,48 @@ let players = [
 let currentPlayer = 0;
 
 
+/* Générer le jeu */
 connect4 = generateGrid(columnNumber, rowNumber);
-console.log(connect4);
 
 
+/**
+ * Vérification des combinaisons
+ * @returns 
+ */
 function checkWinner() {
 	if(checkVertically() || checkHorizontally() || checkDiagonally()) {
 		victoriousSong = true;
-		gameInfo.textContent = `Le gagnant est : ${players[currentPlayer].name}`;
+		
+		/* Désactiver le jeu */
 		gameGrid.classList.add('disabled');
+
+		/* Incrémenter le score du gagnant */
+		gameInfo.textContent = `Le gagnant est : ${players[currentPlayer].name}`;
+		players[currentPlayer].symbol == 1 ? playerOneScore.textContent++ : playerTwoScore.textContent++;
+
+		/* Création bouton restart */
+		restartGameButton.classList.add('show');
+
+		let button = document.createElement('DIV');
+		button.classList.add('restart-button');
+		button.textContent = 'Nouvelle partie';
+		restartGameButton.appendChild(button);
+
+		restartGameButton.addEventListener('click', () => {
+			restartGame();
+		});
 	}
 	return false;
 }
 
 
-/* Montrer la combinaison victorieuse */
+/**
+ * Montrer la combinaison victorieuse
+ * @param {String} cell1 Première cellule
+ * @param {String} cell2 
+ * @param {String} cell3 
+ * @param {String} cell4 Dernière cellule
+ */
 function showWinner(cell1, cell2, cell3, cell4) {
 	for (let i = 0; i < 4; i++) {
 		document.querySelector(`[data-cell='${arguments[i]}']`).classList.add('showWinner');
@@ -52,7 +80,10 @@ function showWinner(cell1, cell2, cell3, cell4) {
 }
 
 
-/* Vérifier la combinaison de victoire verticalement */
+/**
+ * Vérifier les combinaisons de victoire verticalement
+ * @returns 
+ */
 function checkVertically() {
 	for(let i = columnNumber-1; i >= 0; i--){
 		for (let j = 0; j < rowNumber-3; j++){
@@ -62,14 +93,16 @@ function checkVertically() {
 				connect4[i][j+3] === players[currentPlayer].symbol) 
 				{
 					showWinner(`${i}-${j}`, `${i}-${j+1}`, `${i}-${j+2}`, `${i}-${j+3}`);
-					console.log(`Combinaison gagnante : ${i}-${j} -- ${i}-${j+1} -- ${i}-${j+2} -- ${i}-${j+3}`);
 					return true;
 			}
 		}
 	}
 }
 
-/* Vérifier la combinaison de victoire horizontalement */
+/**
+ * Vérifier les combinaisons de victoire horizontalement
+ * @returns 
+ */
 function checkHorizontally() {
 	for(let i = 0; i < rowNumber; i++){
 		for (let j = columnNumber-4; j >= 0; j--){
@@ -79,14 +112,16 @@ function checkHorizontally() {
 				connect4[j+3][i] === players[currentPlayer].symbol) 
 				{
 					showWinner(`${j}-${i}`, `${j+1}-${i}`, `${j+2}-${i}`, `${j+3}-${i}`);
-					console.log(`Combinaison gagnante : ${j}-${i} -- ${j+1}-${i} -- ${j+2}-${i} -- ${j+3}-${i}`);
 					return true;
 			}
 		}
 	}
 }
 
-/* Vérifier la combinaison de victoire diagonalement */
+/**
+ * Vérifier les combinaisons de victoire diagonalement
+ * @returns 
+ */
 function checkDiagonally() {
 	for(let i = rowNumber-3; i >= 0; i--){
 		for (let j = 0; j < columnNumber-4; j++){
@@ -96,7 +131,6 @@ function checkDiagonally() {
 				connect4[i+3][j+3] === players[currentPlayer].symbol) 
 				{
 					showWinner(`${i}-${j}`, `${i+1}-${j+1}`, `${i+2}-${j+2}`, `${i+3}-${j+3}`);
-					console.log(`Combinaison gagnante : ${i}-${j} -- ${i+1}-${j+1} -- ${i+2}-${j+2} -- ${i+3}-${j+3}`);
 					return true;
 			}
 		}
@@ -109,15 +143,37 @@ function checkDiagonally() {
 				connect4[i+3][j-3] === players[currentPlayer].symbol) 
 				{
 					showWinner(`${i}-${j}`, `${i+1}-${j-1}`, `${i+2}-${j-2}`, `${i+3}-${j-3}`);
-					console.log(`Combinaison gagnante : ${i}-${j} -- ${i+1}-${j-1} -- ${i+2}-${j-2} -- ${i+3}-${j-3}`);
 					return true;
 			}
 		}
 	}
 }
 
+/**
+ * Nouvelle partie
+ */
+function restartGame() {
+	/* Effacer le jeu */
+	while (gameGrid.firstChild) {
+		gameGrid.firstChild.remove();
+	}
+	while (restartGameButton.firstChild) {
+		restartGameButton.firstChild.remove();
+	}
 
-/* Changement de joueur */
+	/* Ré-initialisation des variables pour une nouvelle partie */
+	gameGrid.classList.remove('disabled');
+	connect4 = [];
+	connect4 = generateGrid(columnNumber, rowNumber)
+	victoriousSong = false;
+	currentPlayTurn = 0;
+	gameInfo.textContent = "";
+}
+
+
+/**
+ * Changement de joueur
+ */
 function playerTurn() {
 	/* On passe la main à l'autre joueur */
 	if(!victoriousSong) {
@@ -139,7 +195,10 @@ function playerTurn() {
 }
 
 
-/* Coloriser la dernière cellule d'une colonne */
+/**
+ * Coloriser la dernière cellule d'une colonne
+ * @param {*} inColumn Colonne contenant les div
+ */
 function colorColumnCell(inColumn) {
 	/* Récupération des nodes de la colonne */
 	let lastChild = inColumn.childNodes;
@@ -173,7 +232,12 @@ function colorColumnCell(inColumn) {
 }
 
 
-/* Générer la grille de jeu */
+/**
+ * Générer la grille de jeu
+ * @param {Number} axeX Nombre de colonne
+ * @param {Number} axeY Nombre de ligne
+ * @returns Tableau des résultats
+ */
 function generateGrid(axeX, axeY) {
 	/* D'abord les colonnes (en flex) */
 	let connectTable = [];
