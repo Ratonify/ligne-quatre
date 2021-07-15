@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Puissance 4 / Connect 4</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-12 text-center">
+				<h1>Puissance 4</h1>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-6">
+				Score : <span id="player-one-score">0</span> - <span id="player-two-score">0</span>
+			</div>
+
+			<div class="col-6">
+				Au tour de : <span id="players-turn"></span><br>
+				Information : <span id="game-info"></span>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-12">
+				<div id="connect-4"></div>
+			</div>
+		</div>
+	</div>
+
+	<script src="script.js"></script>
+</body>
+</html>
