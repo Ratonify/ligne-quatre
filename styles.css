@@ -1,7 +1,177 @@
 /* COMMUN */
-body {
+html,body {
 	background-color: aliceblue;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height:100%;
 }
+@font-face {
+	font-family: 'lcd-font';
+	src: url('liquidcrystal-exbold-webfont.woff2') format('woff2'),
+			 url('liquidcrystal-exbold-webfont.woff') format('woff');
+	font-weight: bold;
+	font-style: bold;
+}
+
+/* HOME */
+#settings {
+	position: relative;
+	background-color: white;
+	border: 2px solid #c7e8ed;
+	border-radius: 5px;
+	padding: 0 15px;
+	animation: fadein-opacity 1s;
+}
+.choose-player {
+	background-color: white;
+	border: 2px solid #295eac;
+	color: #295eac;
+	font-weight: bold;
+	margin: 0 5px;
+	padding: 5px 10px;
+	box-shadow: #295eac 3px 3px 0;
+	transition: all 0.2s ease-in-out;
+	cursor: pointer;
+}
+.choose-player:hover {
+	border: 2px solid black;
+	color: black;
+	box-shadow: black 3px 3px 0;
+}
+
+/* PUISSANCE 4 */
+.bg-motif {
+	background-color: #295eac;
+}
+.top-board {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+	border-radius: 10px 10px 0 0;
+	border-bottom: 3px solid #1f519b;
+}
+.game-name {
+	margin-left: 20px;
+	width: 235px;
+	height: 90px;
+	color: white;
+	background-image: url('logo.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+.game-lcd {
+	width: 45%;
+	margin: 10px;
+	padding: 5px 10px;
+	background: rgb(91,107,70);
+	background: linear-gradient(225deg, rgba(91,107,70,1) 0%, rgba(141,164,98,1) 100%);
+	border: 3px outset #2c2922;
+	border-width: 3px 6px;
+	border-radius: 5px;
+	box-shadow: inset rgba(0, 0, 0, 0.6) 2px 2px 10px, rgba(255, 255, 255, 0.2) 0px 1px 4px 0px;
+	color: black;
+	font-family: 'lcd-font', verdana;
+	font-weight: bold;
+}
+#player-one-score, #player-two-score {
+	color: brown;
+}
+#game-info {
+	color: brown;
+	animation: blink-animation 1s steps(5, start) infinite;
+}
+.invisible-dot {
+	color: #6e7f48;
+}
+#connect4-game {
+	position: relative;
+	width: 740px;
+	padding: 0 15px;
+	animation: fadein-opacity 1s;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+/*
+#connect4-game:after, #connect4-game:before {
+	content: '';
+	position: absolute;
+	bottom: -40px;
+	width: 35px;
+	height: 200px;
+	background: #295eac;
+	background: linear-gradient(to bottom,  #295eac 0%,#207cca 23%,#295eac 40%,#295eac 64%,#207cca 84%,#295eac 87%); 
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+	border-top: 1px solid #12428a;
+}
+#connect4-game:after {
+	right: -20px;
+	border-left: 1px solid #184e9f;
+}
+#connect4-game:before {
+	left: -20px;
+	border-right: 1px solid #184e9f;
+}*/
+#connect-4 {
+	display: flex;
+	border-top: 2px solid #12428a;
+	outline: 2px solid #204f96;
+	outline-offset: -8px;
+	padding: 15px;
+}
+.column-style {
+	display: flex;
+	flex-wrap: wrap;
+	width: calc(100% / 7);
+	border:2px solid transparent;
+}
+.column-style:hover {
+	border:2px solid rgba(255, 255, 255, 0.3);
+	border-radius: 50px;
+	animation: flicker-animation-bg 1.5s infinite;
+	cursor: pointer;
+}
+.cell-empty {
+	background-color: aliceblue;
+	border: 4px outset rgb(60, 115, 198);
+	box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px 0px, rgba(0, 0, 0, 0.35) 0px 1px 3px 1px, rgba(0, 0, 0, 0.25) 0px 50px 30px -28px inset, rgba(36, 93, 179, 0.4) 0px -5px 0 inset;
+	border-radius: 50%;
+	margin: 10px;
+	width: 100%;
+	height: 76px;
+}
+.token-placed {
+	background-image: url('token.svg');
+	background-size: cover;
+	box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px 0px, rgba(0, 0, 0, 0.35) 0px 1px 3px 1px, inset rgba(0, 0, 0, 0.4) 0 7px 6px !important;
+}
+.showWinner {
+	border: 4px outset rgb(63, 208, 60);
+}
+.restart-button {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 200px;
+	height: 35px;
+	left: 100px;
+	text-transform: uppercase;
+	font-weight: bold;
+	background-color: crimson;
+	color: white;
+	border-radius: 5px;
+	cursor:pointer;
+	z-index: 5;
+	animation: growOnMe .25s;
+}
+.animation-fadein {
+	animation: fadein-opacity 0.7s;
+}
+.animation-fadein-out {
+	animation: flicker-animation 1s;
+}
+
 .disabled {
 	pointer-events:none;
 }
@@ -12,43 +182,39 @@ body {
 	display: none;
 }
 
-/* PUISSANCE 4 */
-#connect-4 {
-	display: flex;
+/* SPECTRUM */
+.sp-replacer {
+	height:inherit !important;
+	width:65px !important;
 }
-.column-style {
-	display: flex;
-	flex-wrap: wrap;
-	width: calc(100% / 7);
-	border:2px solid transparent;
+.sp-dd {
+	line-height:inherit;
 }
-.column-style:hover {
-	border:2px solid red;
-	cursor: pointer;
+
+/* KEYFRAMES */
+@keyframes fadein-opacity {
+	from { opacity:0 } 
+	to { opacity:1 }
 }
-.cell-empty {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: blanchedalmond;
-	margin: 5px;
-	width: 100%;
-	height: 50px;
-	text-align: center;
-	font-weight: bold;
-	font-size:12pt;
+@keyframes flicker-animation {
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
 }
-.playerOne {
-	background-color: chocolate;
+@keyframes flicker-animation-bg {
+	0%   { background-color: rgba(133, 165, 213, 0.3); border:2px solid rgba(255, 255, 255, 0.2); }
+	50%  { background-color: rgba(133, 186, 213, 0.5); border:2px solid rgba(163, 231, 241, 0.4); }
+	100% { background-color: rgba(133, 165, 213, 0.3); border:2px solid rgba(255, 255, 255, 0.2); }
 }
-.playerTwo {
-	background-color: cornflowerblue;
+@keyframes blink-animation {
+	to { visibility: hidden; }
 }
-.showWinner {
-	border: 3px solid mediumseagreen;
-}
-.restart-button {
-	border: 2px solid midnightblue;
-	background-color: palegoldenrod;
-	cursor: pointer;
+
+@keyframes growOnMe {
+	from {
+		transform: scale(0);
+	}
+	to {
+		transform: scale(1);
+	}
 }

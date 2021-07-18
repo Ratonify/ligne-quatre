@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(0.932174,0,0,0.932174,10.1738,10.1738)">
+        <path d="M150,17.391C223.189,17.391 282.609,76.811 282.609,150C282.609,223.189 223.189,282.609 150,282.609C76.811,282.609 17.391,223.189 17.391,150C17.391,76.811 76.811,17.391 150,17.391ZM150,35.87C212.99,35.87 264.13,87.01 264.13,150C264.13,212.99 212.99,264.13 150,264.13C87.01,264.13 35.87,212.99 35.87,150C35.87,87.01 87.01,35.87 150,35.87Z" style="fill:url(#_Linear1);"/>
+    </g>
+    <g transform="matrix(0.939457,0,0,0.939457,-3.10282,7.69241)">
+        <circle cx="162.97" cy="151.479" r="81.793" style="fill:url(#_Radial2);"/>
+    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-182.577,-191.681,191.681,-182.577,239.943,247.688)"><stop offset="0" style="stop-color:white;stop-opacity:0.25"/><stop offset="1" style="stop-color:white;stop-opacity:0.1"/></linearGradient>
+        <radialGradient id="_Radial2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(93.3239,0,0,93.3239,162.97,151.479)"><stop offset="0" style="stop-color:white;stop-opacity:0.2"/><stop offset="1" style="stop-color:white;stop-opacity:0.05"/></radialGradient>
+    </defs>
+</svg>

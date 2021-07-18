@@ -3,44 +3,80 @@
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Puissance 4 / Connect 4</title>
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
+	<link href="https://allfont.net/allfont.css?fonts=liquid-crystal-display" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-	<div class="container">
+
+	<!-- Menu -->
+	<div id="settings">
 		<div class="row">
-			<div class="col-12 text-center">
-				<h1>Puissance 4</h1>
+			<div class="col-12 mt-3 text-center">
+				<h2>Puissance 4</h2>
+				<div class="my-4">
+					<span class="choose-player" onclick="showNameJ2(2)">1P VS CPU</span> <span class="choose-player" onclick="showNameJ2(1)">1P VS 2P</span>
+				</div>
 			</div>
 		</div>
-		
-		<div class="row">
-			<div class="col-6">
-				Score : <span id="player-one-score">0</span> - <span id="player-two-score">0</span>
+		<div id="fade-group">
+			<div class="row mt-1 mb-2">
+				<div class="col-12 text-center">
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<input id="J1-couleur" class="form-control" value="#e2241c">
+							<label class="input-group-text input-names" for="J1-nom">Joueur 1</label>
+						</div>
+						<input id="J1-nom" class="form-control" onkeyup="checkValues()" placeholder="...">
+					</div>
+				</div>
 			</div>
+			<div class="row mb-4">
+				<div class="col-12 text-center">
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<input id="J2-couleur" class="form-control" value="#f7be00">
+							<label id="CPU--J2" class="input-group-text input-names" for="J2-nom">CPU</label>
+						</div>
+						<input id="J2-nom" class="form-control" onkeyup="checkValues()" placeholder="..." style="display:none;">
+						<input id="J2-cpu" class="form-control" value="1" type="hidden">
+					</div>
+				</div>
+			</div>
+		</div>
+		<button id="generate" type="button" class="btn btn-info btn-lg btn-block mb-3" disabled>Lancer la partie</button>
+	</div>
 
-			<div class="col-6">
+	<!-- Puissance 4 -->
+	<div id="connect4-game" class="hide">
+		<div class="row top-board bg-motif">
+			<div class="game-name"></div>
+
+			<div class="game-lcd">
+				Score : <span id="player-one-name">0</span> | <span id="player-one-score">0</span> | <span id="player-two-score">0</span> | <span id="player-two-name">0</span><br>
 				Au tour de : <span id="players-turn"></span><br>
-				Information : <span id="game-info"></span>
+				Info : <span id="game-info"></span>
 			</div>
+
+			<div id="restart" class="restart-button hide">Nouvelle partie</div>
 		</div>
 
 		<div class="row">
-			<div class="col-12">
-				<div id="connect-4"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-12">
-				<div id="restart" class="hide"></div>
-			</div>
+			<div id="connect-4" class="bg-motif"></div>
 		</div>
 	</div>
 
+	<!-- JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.js"></script>
+	<script>
+		$('#J1-couleur, #J2-couleur').spectrum({
+			type: "color"
+		});
+	</script>
 	<script src="script.js"></script>
 </body>
 </html>

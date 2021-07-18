@@ -3,13 +3,14 @@
 *   14/7/2021   *
 *  by Ratonify  *
 ************** */
-let gameGrid = document.getElementById('connect-4');
-let playerOneScore = document.getElementById('player-one-score');
-let playerTwoScore = document.getElementById('player-two-score');
-let playersTurn = document.getElementById('players-turn');
-let gameInfo = document.getElementById('game-info');
-let restartGameButton = document.getElementById('restart');
-
+/* GAME */
+const gameGrid = document.getElementById('connect-4');
+const playerOneScore = document.getElementById('player-one-score');
+const playerTwoScore = document.getElementById('player-two-score');
+const playersTurn = document.getElementById('players-turn');
+const gameInfo = document.getElementById('game-info');
+const restartGameButton = document.getElementById('restart');
+/* VARIABLES */
 let columnNumber = 7;
 let rowNumber = 6;
 let connect4 = [];
@@ -29,11 +30,84 @@ let players = [
 	}
 ];
 let currentPlayer = 0;
+/* HOME */
+const cpuActivated = document.getElementById("J2-cpu")
+const generate = document.getElementById('generate');
+const inputJ1 = document.getElementById('J1-nom');
+const inputJ2 = document.getElementById('J2-nom');
+
+generate.addEventListener('click', () => {
+	/* Générer le jeu */
+	launchConnect4();
+});
 
 
-/* Générer le jeu */
-connect4 = generateGrid(columnNumber, rowNumber);
+/**
+ * Vérifier qu'il y a bien des noms pour les joueurs
+ */
+function checkValues() {
+	if(cpuActivated.value == "1") {
+		/* Si CPU, désactiver uniquement si nom du joueur 1 est vide OU si nom = CPU */
+		generate.disabled = (inputJ1.value === "") || (inputJ1.value == "CPU") ? true : false;
+	} else {
+		/* Désactiver le bouton "Générer" si axeX ET/OU axeY est vide OU si les noms sont identiques */
+		generate.disabled = (inputJ1.value === "" && inputJ2.value === "") || (inputJ1.value === "" || inputJ2.value === "") || (inputJ1.value == inputJ2.value) ? true : false;
+	}
+}
 
+
+/**
+ * Afficher/masquer l'input du J2
+ * @param {*} mode 1 joueur ou 2 joueurs
+ */
+function showNameJ2(mode) {
+	let changeCPU = document.getElementById("CPU--J2");
+	let showJ2 = document.getElementById("J2-nom");
+	
+	document.getElementById("fade-group").classList.remove('animation-fadein');
+	document.getElementById("fade-group").offsetHeight;
+	document.getElementById("fade-group").classList.add('animation-fadein');
+
+	/* Gestion du CPU et du joueur 2 */
+	if (mode === 1) {
+		changeCPU.innerText = "Joueur 2";
+		showJ2.style.display = "block";
+		cpuActivated.value = "0";
+	} else {
+		changeCPU.innerText = "CPU";
+		showJ2.style.display = "none";
+		cpuActivated.value = "1";
+	}
+	checkValues();
+}
+
+/**
+ * Démarer le jeu pour la première fois
+ */
+function launchConnect4() {
+	/* Au lancement du jeu, masquer les paramètres */
+	document.getElementById('settings').classList.add("hide");
+	document.getElementById('connect4-game').classList.add("superb", "show");
+
+	/* Récupérer les valeurs des couleurs */
+	let colorX = $("#J1-couleur").spectrum("get");
+	let colorY = $("#J2-couleur").spectrum("get");
+
+	/* Insérer le nom des joueurs */
+	players[0].name = inputJ1.value;
+	players[1].name = inputJ2.value;
+
+	/* Création et injection d'une balise style avec les couleurs */
+	let styleBg = document.createElement('style');
+	styleBg.innerText = `.playerOne { background-color: ${colorX}; } .playerTwo { background-color: ${colorY}; } }`;
+	document.head.appendChild(styleBg);
+
+	/* Afficher le panneau des scores et des infos */
+	document.getElementById("player-one-name").textContent = `${players[0].name}`;
+	document.getElementById("player-two-name").textContent = `${players[1].name}`;
+
+	connect4 = generateGrid(columnNumber, rowNumber);
+}
 
 /**
  * Vérification des combinaisons
@@ -47,16 +121,11 @@ function checkWinner() {
 		gameGrid.classList.add('disabled');
 
 		/* Incrémenter le score du gagnant */
-		gameInfo.textContent = `Le gagnant est : ${players[currentPlayer].name}`;
+		gameInfo.textContent = `Le gagnant est ${players[currentPlayer].name} !`;
 		players[currentPlayer].symbol == 1 ? playerOneScore.textContent++ : playerTwoScore.textContent++;
 
-		/* Création bouton restart */
+		/* Popup pour relancer une partie */
 		restartGameButton.classList.add('show');
-
-		let button = document.createElement('DIV');
-		button.classList.add('restart-button');
-		button.textContent = 'Nouvelle partie';
-		restartGameButton.appendChild(button);
 
 		restartGameButton.addEventListener('click', () => {
 			restartGame();
@@ -157,12 +226,10 @@ function restartGame() {
 	while (gameGrid.firstChild) {
 		gameGrid.firstChild.remove();
 	}
-	while (restartGameButton.firstChild) {
-		restartGameButton.firstChild.remove();
-	}
 
 	/* Ré-initialisation des variables pour une nouvelle partie */
 	gameGrid.classList.remove('disabled');
+	restartGameButton.classList.remove('show');
 	connect4 = [];
 	connect4 = generateGrid(columnNumber, rowNumber)
 	victoriousSong = false;
@@ -185,7 +252,7 @@ function playerTurn() {
 	/* Compter le nombre de tours de jeu */
 	/* Si le plateau de jeu est à ras bord */
 	if (currentPlayTurn == limitPlayTurn-1) {
-		gameInfo.textContent = "Partie terminée.";
+		gameInfo.textContent = "Partie terminée";
 		gameGrid.classList.add('disabled');
 	}
 	/* Sinon la partie continue */
@@ -216,7 +283,7 @@ function colorColumnCell(inColumn) {
 			checkWinner();
 
 			/* Colorisation de la cellule et on change de joueur */
-			lastChild[i].classList.add('cell-colored', `${players[currentPlayer].bgColor}`);
+			lastChild[i].classList.add('cell-colored', `${players[currentPlayer].bgColor}`, 'token-placed');
 
 			playerTurn();
 
@@ -224,7 +291,7 @@ function colorColumnCell(inColumn) {
 		} 
 		/* Sinon la colonne est pleine, rien de ne passe */
 		else if (lastChild[0].classList.contains('cell-colored')) {
-			gameInfo.textContent = "Choisissez une autre colonne.";
+			gameInfo.textContent = "Choisissez une autre colonne";
 
 			break;
 		}
@@ -258,7 +325,6 @@ function generateGrid(axeX, axeY) {
 			let row = document.createElement("DIV");
 			row.classList.add('cell-empty');
 			row.dataset.cell = `${x}-${y}`;
-			row.textContent = `${x}-${y}`;
 			column.appendChild(row);
 
 			connectCell.push(`${x}-${y}`);
