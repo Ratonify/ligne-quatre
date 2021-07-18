@@ -7,8 +7,7 @@
 const gameGrid = document.getElementById('connect-4');
 const playerOneScore = document.getElementById('player-one-score');
 const playerTwoScore = document.getElementById('player-two-score');
-const playersTurn = document.getElementById('players-turn');
-const gameInfo = document.getElementById('game-info');
+const playersTurn = document.getElementById('players-turn-token');
 const restartGameButton = document.getElementById('restart');
 /* VARIABLES */
 let columnNumber = 7;
@@ -99,12 +98,17 @@ function launchConnect4() {
 
 	/* Création et injection d'une balise style avec les couleurs */
 	let styleBg = document.createElement('style');
-	styleBg.innerText = `.playerOne { background-color: ${colorX}; } .playerTwo { background-color: ${colorY}; } }`;
+	styleBg.innerText = `.playerOne { background-color: ${colorX}; } 
+	.playerTwo { background-color: ${colorY}; } 
+	.playerOneBg { background: linear-gradient(30deg, rgba(214,232,248,1) 50%, ${colorX} 100%); }
+	.playerTwoBg { background: linear-gradient(330deg, rgba(214,232,248,1) 50%, ${colorY} 100%); }`;
 	document.head.appendChild(styleBg);
 
 	/* Afficher le panneau des scores et des infos */
 	document.getElementById("player-one-name").textContent = `${players[0].name}`;
 	document.getElementById("player-two-name").textContent = `${players[1].name}`;
+	document.getElementById("player-one-name").classList.add('playerOneBg');
+	document.getElementById("player-two-name").classList.add('playerTwoBg');
 
 	connect4 = generateGrid(columnNumber, rowNumber);
 }
@@ -121,7 +125,6 @@ function checkWinner() {
 		gameGrid.classList.add('disabled');
 
 		/* Incrémenter le score du gagnant */
-		gameInfo.textContent = `Le gagnant est ${players[currentPlayer].name} !`;
 		players[currentPlayer].symbol == 1 ? playerOneScore.textContent++ : playerTwoScore.textContent++;
 
 		/* Popup pour relancer une partie */
@@ -234,7 +237,6 @@ function restartGame() {
 	connect4 = generateGrid(columnNumber, rowNumber)
 	victoriousSong = false;
 	currentPlayTurn = 0;
-	gameInfo.textContent = "";
 }
 
 
@@ -245,15 +247,27 @@ function playerTurn() {
 	/* On passe la main à l'autre joueur */
 	if(!victoriousSong) {
 		currentPlayer = currentPlayer == 1 ? 0 : 1;
-		playersTurn.textContent = players[currentPlayer].name;
-		gameInfo.textContent = "";
+
+		if(currentPlayer == 1) {
+			playersTurn.classList.remove(`${players[0].bgColor}`);
+			playersTurn.classList.add(`${players[1].bgColor}`);
+		} else {
+			playersTurn.classList.remove(`${players[1].bgColor}`);
+			playersTurn.classList.add(`${players[0].bgColor}`);
+		}
 	}
 
 	/* Compter le nombre de tours de jeu */
 	/* Si le plateau de jeu est à ras bord */
 	if (currentPlayTurn == limitPlayTurn-1) {
-		gameInfo.textContent = "Partie terminée";
 		gameGrid.classList.add('disabled');
+
+		/* Popup pour relancer une partie */
+		restartGameButton.classList.add('show');
+
+		restartGameButton.addEventListener('click', () => {
+			restartGame();
+		});
 	}
 	/* Sinon la partie continue */
 	else if (currentPlayTurn < limitPlayTurn) {
@@ -291,8 +305,6 @@ function colorColumnCell(inColumn) {
 		} 
 		/* Sinon la colonne est pleine, rien de ne passe */
 		else if (lastChild[0].classList.contains('cell-colored')) {
-			gameInfo.textContent = "Choisissez une autre colonne";
-
 			break;
 		}
 	}
@@ -332,7 +344,7 @@ function generateGrid(axeX, axeY) {
 		connectTable.push(connectCell);
 	}
 
-	playersTurn.textContent = players[currentPlayer].name;
+	playersTurn.classList.add(`${players[currentPlayer].bgColor}`);
 
 	return connectTable;
 }
