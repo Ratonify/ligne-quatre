@@ -35,6 +35,7 @@ const generate = document.getElementById('generate');
 const inputJ1 = document.getElementById('J1-nom');
 const inputJ2 = document.getElementById('J2-nom');
 
+
 generate.addEventListener('click', () => {
 	/* Générer le jeu */
 	launchConnect4();
@@ -75,6 +76,7 @@ function showNameJ2(mode) {
 	} else {
 		changeCPU.innerText = "CPU";
 		showJ2.style.display = "none";
+		inputJ2.value = "";
 		cpuActivated.value = "1";
 	}
 	checkValues();
@@ -94,7 +96,7 @@ function launchConnect4() {
 
 	/* Insérer le nom des joueurs */
 	players[0].name = inputJ1.value;
-	players[1].name = inputJ2.value;
+	players[1].name = inputJ2.value === "" ? players[1].name = "CPU" : inputJ2.value;
 
 	/* Création et injection d'une balise style avec les couleurs */
 	let styleBg = document.createElement('style');
@@ -245,7 +247,7 @@ function restartGame() {
  */
 function playerTurn() {
 	/* On passe la main à l'autre joueur */
-	if(!victoriousSong) {
+	if(!victoriousSong || victoriousSong && cpuActivated.value == "1") {
 		currentPlayer = currentPlayer == 1 ? 0 : 1;
 
 		if(currentPlayer == 1) {
@@ -254,6 +256,45 @@ function playerTurn() {
 		} else {
 			playersTurn.classList.remove(`${players[1].bgColor}`);
 			playersTurn.classList.add(`${players[0].bgColor}`);
+		}
+	}
+
+	/* Gestion de l'IA -- Si c'est au tour du CPU de jouer */
+	if (!victoriousSong && currentPlayer === 1 && cpuActivated.value == "1") {
+
+		/* Récupérer toutes les colonnes */
+		let randomDiv = document.getElementsByClassName('column-style');
+
+		/* Boucle pour trouver une colonne vide */
+		while (true) {
+			/* Sélection d'une colonne au hasard */
+			let randomizer = randomDiv[Math.floor(Math.random() * randomDiv.length)];
+			let lastChild = randomizer.childNodes;
+
+			/* On boucle jusqu'à trouver une colonne vide */
+			if(!lastChild[0].classList.contains('cell-colored')) {
+				/* Boucle pour coloriser la première cellule en partant de la fin */
+				for (let i = rowNumber-1; i >= 0; i--) {
+					/* Vérifier s'il y a une place restante dans la colonne */
+					if (!lastChild[i].classList.contains('cell-colored')) {
+
+					/* Indiquer le symbole dans le tableau grâce au dataset de la cellule */
+					let cellCoordonnates = lastChild[i].dataset.cell.split("-");
+					connect4[cellCoordonnates[0]][cellCoordonnates[1]] = players[currentPlayer].symbol;
+
+					/* Vérifier les conditions de victoire */
+					checkWinner();
+
+					/* Colorisation de la cellule et on change de joueur */
+					lastChild[i].classList.add('cell-colored', `${players[currentPlayer].bgColor}`, 'token-placed');
+
+					playerTurn();
+
+					break;
+					} 
+				}
+				break;
+			}
 		}
 	}
 
