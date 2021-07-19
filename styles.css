@@ -7,11 +7,8 @@ html,body {
 	font-family: 'Righteous', cursive;
 }
 body {
-	background-color: #F3F1EF;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='100%25' height='100%25'%3E%3Cdefs%3E%3Cpattern id='p' width='100' height='100' patternUnits='userSpaceOnUse'%3E%3Cpath id='a' data-color='fill' fill='%23F0F8FF' d='M50 100L0 50V0l50 50 50-50h0v50l-50 50z'%3E%3C/path%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23p)' width='100%25' height='100%25'%3E%3C/rect%3E%3C/svg%3E");
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
+	background-color: #f3f1ef;
+	background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23dfd6cd' fill-opacity='0.4'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* HOME */
@@ -105,7 +102,7 @@ body {
 	background-image: url('token.svg');
 	background-size: cover;
 	border-radius: 50%;
-	box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(14, 39, 78, 0.3) 0px 4px 2px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+	box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(14, 39, 78, 0.3) 0px 4px 2px, inset rgba(0, 0, 0, 0.4) 0 7px 6px;
 }
 .text-highlight {
 	text-transform: uppercase;
@@ -178,6 +175,10 @@ body {
 	z-index: 5;
 	box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 	animation: heartbeat 1.5s ease-in-out infinite both;
+	transition: background-color 0.15s;
+}
+.restart-button:hover {
+	background-color: #c80028;
 }
 
 #connect4-game {
@@ -207,19 +208,19 @@ body {
 	cursor: pointer;
 }
 .column-style:hover.column-style:before {
-	content: '\e5cf';
+	content: '';
 	position: absolute;
 	width: 50px;
 	height: 50px;
 	top: -60px;
 	margin-left: 25px;
 	font-size: 38pt;
-	font-family: 'Material Icons';
 	color: #bf7000;
-	animation: flicker-animation-inverse 1.5s infinite;
+	animation: translate-x 1.5s infinite;
+	background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' viewBox='0 0 490 490' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xml:space='preserve' xmlns:serif='http://www.serif.com/' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'%3E%3Cg transform='matrix(6.12323e-17,-1,1,6.12323e-17,-2.84217e-14,490)'%3E%3Cpath d='M413.476,398.302L258.215,245L413.476,91.69L324.619,0L76.524,245L324.618,490L413.476,398.302ZM120.086,245L324.14,43.502L370.392,91.212L214.653,245L370.392,398.781L324.14,446.498L120.086,245Z' style='fill:rgb(191,112,0);fill-rule:nonzero;'/%3E%3C/g%3E%3C/svg%3E");
 }
 .cell-empty {
-	background-color: aliceblue;
+	background-color: #f3f1ef;
 	border: 4px outset rgb(60, 115, 198);
 	box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px 0px, rgba(0, 0, 0, 0.35) 0px 1px 3px 1px, rgba(0, 0, 0, 0.25) 0px 50px 30px -28px inset, rgba(36, 93, 179, 0.4) 0px -5px 0 inset;
 	border-radius: 50%;
@@ -235,7 +236,7 @@ body {
 }
 .showWinner {
 	background-image: url('token_v.svg');
-	border: 4px outset rgb(227, 161, 35);
+	border: 4px outset rgb(227, 161, 35) !important;
 	box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px 0px, rgba(0, 0, 0, 0.35) 0px 1px 3px 1px, rgba(227, 161, 35, 0.65) 0px 0px 8px 1px, inset rgba(0, 0, 0, 0.4) 0 7px 6px !important;
 }
 .animation-fadein {
@@ -274,10 +275,10 @@ body {
 	50%  { opacity:0; }
 	100% { opacity:1; }
 }
-@keyframes flicker-animation-inverse {
-	0%   { opacity:0; }
-	50%  { opacity:1; }
-	100% { opacity:0; }
+@keyframes translate-x {
+	0%   { transform: translate(0, 0); }
+	50%  { transform: translate(0, -10px); }
+	100% { transform: translate(0, 0); }
 }
 @keyframes flicker-animation-bg {
 	0%   { background-color: rgba(133, 165, 213, 0.3); border:2px solid rgba(255, 255, 255, 0.2); }
@@ -297,10 +298,6 @@ body {
 	17% {
 		transform: scale(0.98);
 		animation-timing-function: ease-out;
-	}
-	33% {
-		transform: scale(0.87);
-		animation-timing-function: ease-in;
 	}
 	45% {
 		transform: scale(1);

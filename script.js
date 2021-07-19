@@ -98,8 +98,8 @@ function launchConnect4() {
 
 	/* Création et injection d'une balise style avec les couleurs */
 	let styleBg = document.createElement('style');
-	styleBg.innerText = `.playerOne { background-color: ${colorX}; } 
-	.playerTwo { background-color: ${colorY}; } 
+	styleBg.innerText = `.playerOne { background-color: ${colorX}; border: 4px outset gray; } 
+	.playerTwo { background-color: ${colorY}; border: 4px outset ${colorY}; } 
 	.playerOneBg { background: linear-gradient(30deg, rgba(214,232,248,1) 50%, ${colorX} 100%); }
 	.playerTwoBg { background: linear-gradient(330deg, rgba(214,232,248,1) 50%, ${colorY} 100%); }`;
 	document.head.appendChild(styleBg);
