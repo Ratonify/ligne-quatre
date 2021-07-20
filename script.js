@@ -3,7 +3,8 @@
 *   14/7/2021   *
 *  by Ratonify  *
 ************** */
-/* GAME */
+
+/* CONST GAME */
 const gameGrid = document.getElementById('connect-4');
 const playerOneScore = document.getElementById('player-one-score');
 const playerTwoScore = document.getElementById('player-two-score');
@@ -29,15 +30,15 @@ let players = [
 	}
 ];
 let currentPlayer = 0;
-/* HOME */
+/* CONST HOME */
 const cpuActivated = document.getElementById("J2-cpu")
 const generate = document.getElementById('generate');
 const inputJ1 = document.getElementById('J1-nom');
 const inputJ2 = document.getElementById('J2-nom');
 
 
+/* -- Générer le jeu -- */
 generate.addEventListener('click', () => {
-	/* Générer le jeu */
 	launchConnect4();
 });
 
@@ -47,10 +48,8 @@ generate.addEventListener('click', () => {
  */
 function checkValues() {
 	if(cpuActivated.value == "1") {
-		/* Si CPU, désactiver uniquement si nom du joueur 1 est vide OU si nom = CPU */
 		generate.disabled = (inputJ1.value === "") || (inputJ1.value == "CPU") ? true : false;
 	} else {
-		/* Désactiver le bouton "Générer" si axeX ET/OU axeY est vide OU si les noms sont identiques */
 		generate.disabled = (inputJ1.value === "" && inputJ2.value === "") || (inputJ1.value === "" || inputJ2.value === "") || (inputJ1.value == inputJ2.value) ? true : false;
 	}
 }
@@ -98,12 +97,12 @@ function launchConnect4() {
 	players[0].name = inputJ1.value;
 	players[1].name = inputJ2.value === "" ? players[1].name = "CPU" : inputJ2.value;
 
-	/* Création et injection d'une balise style avec les couleurs */
+	/* Création et injection d'une balise style avec les couleurs de Spectrum */
 	let styleBg = document.createElement('style');
 	styleBg.innerText = `.playerOne { background-color: ${colorX}; border: 4px outset gray; } 
-	.playerTwo { background-color: ${colorY}; border: 4px outset ${colorY}; } 
-	.playerOneBg { background: linear-gradient(30deg, rgba(214,232,248,1) 50%, ${colorX} 100%); }
-	.playerTwoBg { background: linear-gradient(330deg, rgba(214,232,248,1) 50%, ${colorY} 100%); }`;
+											 .playerTwo { background-color: ${colorY}; border: 4px outset ${colorY}; } 
+											 .playerOneBg { background: linear-gradient(30deg, rgba(214,232,248,1) 50%, ${colorX} 100%); }
+											 .playerTwoBg { background: linear-gradient(330deg, rgba(214,232,248,1) 50%, ${colorY} 100%); }`;
 	document.head.appendChild(styleBg);
 
 	/* Afficher le panneau des scores et des infos */
@@ -131,7 +130,6 @@ function checkWinner() {
 
 		/* Popup pour relancer une partie */
 		restartGameButton.classList.add('show');
-
 		restartGameButton.addEventListener('click', () => {
 			restartGame();
 		});
@@ -159,8 +157,8 @@ function showWinner(cell1, cell2, cell3, cell4) {
  * @returns 
  */
 function checkVertically() {
-	for(let i = columnNumber-1; i >= 0; i--){
-		for (let j = 0; j < rowNumber-3; j++){
+	for(let i = columnNumber-1; i >= 0; i--) {
+		for (let j = 0; j < rowNumber-3; j++) {
 			if(connect4[i][j] === players[currentPlayer].symbol &&
 				connect4[i][j+1] === players[currentPlayer].symbol &&
 				connect4[i][j+2] === players[currentPlayer].symbol &&
@@ -178,8 +176,8 @@ function checkVertically() {
  * @returns 
  */
 function checkHorizontally() {
-	for(let i = 0; i < rowNumber; i++){
-		for (let j = columnNumber-4; j >= 0; j--){
+	for(let i = 0; i < rowNumber; i++) {
+		for (let j = columnNumber-4; j >= 0; j--) {
 			if(connect4[j][i] === players[currentPlayer].symbol &&
 				connect4[j+1][i] === players[currentPlayer].symbol &&
 				connect4[j+2][i] === players[currentPlayer].symbol &&
@@ -197,8 +195,8 @@ function checkHorizontally() {
  * @returns 
  */
 function checkDiagonally() {
-	for(let i = rowNumber-3; i >= 0; i--){
-		for (let j = 0; j < columnNumber-4; j++){
+	for(let i = rowNumber-3; i >= 0; i--) {
+		for (let j = 0; j < columnNumber-4; j++) {
 			if(connect4[i][j] === players[currentPlayer].symbol &&
 				connect4[i+1][j+1] === players[currentPlayer].symbol &&
 				connect4[i+2][j+2] === players[currentPlayer].symbol &&
@@ -209,8 +207,8 @@ function checkDiagonally() {
 			}
 		}
 	}
-	for(let i = rowNumber-3; i >= 0; i--){
-		for (let j = columnNumber-2; j > 2; j--){
+	for(let i = rowNumber-3; i >= 0; i--) {
+		for (let j = columnNumber-2; j > 2; j--) {
 			if(connect4[i][j] === players[currentPlayer].symbol &&
 				connect4[i+1][j-1] === players[currentPlayer].symbol &&
 				connect4[i+2][j-2] === players[currentPlayer].symbol &&
@@ -241,13 +239,56 @@ function restartGame() {
 	currentPlayTurn = 0;
 }
 
+/**
+ * C'est le moment de la contre-attaque
+ * @param {*} cell Coordonnées de la cellule
+ * @returns 
+ */
+function checkCounterAttack(cell) {
+	/* Indiquer le symbole dans le tableau grâce au dataset de la cellule */
+	let cellCoordonnatesInverse = cell.split("-");
+
+	/* Récupérer la colonne */
+	let searchCell = document.getElementsByClassName('column-style');
+	let lastChild = searchCell[cellCoordonnatesInverse[0]].childNodes;
+
+	/* Pas la peine de contrer le joueur quand ce n'est pas le cas */
+	let countClasses = 5;
+	for (let i = 0; i < lastChild.length; i++) {
+		if (lastChild[i].classList.contains('cell-colored')) {
+			countClasses--;
+		}
+	}
+
+	if(!lastChild[0].classList.contains('cell-colored') && countClasses <= cellCoordonnatesInverse[1]) {
+		/* Boucle pour coloriser la première cellule en partant de la fin */
+		for (let i = rowNumber-1; i >= 0; i--) {
+			/* Vérifier s'il y a une place restante dans la colonne */
+			if (!lastChild[i].classList.contains('cell-colored')) {
+
+				/* Indiquer le symbole dans le tableau grâce au dataset de la cellule */
+				let cellCoordonnates = lastChild[i].dataset.cell.split("-");
+				connect4[cellCoordonnates[0]][cellCoordonnates[1]] = players[currentPlayer].symbol;
+
+				checkWinner();
+
+				lastChild[i].classList.add('cell-colored', `${players[currentPlayer].bgColor}`, 'token-placed');
+				playerTurn();
+
+				counterAttack = true;
+
+				return counterAttack;
+			} 
+		}
+	}
+}
 
 /**
- * Changement de joueur
+ * Changement de joueur et gestion de l'IA
  */
 function playerTurn() {
 	/* On passe la main à l'autre joueur */
-	if(!victoriousSong || victoriousSong && cpuActivated.value == "1") {
+	if(!victoriousSong || (victoriousSong && currentPlayer === 1 && cpuActivated.value == "1")) {
 		currentPlayer = currentPlayer == 1 ? 0 : 1;
 
 		if(currentPlayer == 1) {
@@ -261,39 +302,134 @@ function playerTurn() {
 
 	/* Gestion de l'IA -- Si c'est au tour du CPU de jouer */
 	if (!victoriousSong && currentPlayer === 1 && cpuActivated.value == "1") {
+		
+		/* Préparation de la contre-attaque de l'IA */
+		let counterAttack = false;
 
-		/* Récupérer toutes les colonnes */
-		let randomDiv = document.getElementsByClassName('column-style');
+		/* Gloubiboulga offensif -- D'abord vérifier si le joueur est sur le point de gagner */
+		for (let i = columnNumber-1; i >= 0; i--) {
+			for (let j = 0; j < rowNumber-3; j++) {
+				let cell1 = connect4[i][j];
+				let cell2 = connect4[i][j+1];
+				let cell3 = connect4[i][j+2];
+				let cell4 = connect4[i][j+3];
 
-		/* Boucle pour trouver une colonne vide */
-		while (true) {
-			/* Sélection d'une colonne au hasard */
-			let randomizer = randomDiv[Math.floor(Math.random() * randomDiv.length)];
-			let lastChild = randomizer.childNodes;
-
-			/* On boucle jusqu'à trouver une colonne vide */
-			if(!lastChild[0].classList.contains('cell-colored')) {
-				/* Boucle pour coloriser la première cellule en partant de la fin */
-				for (let i = rowNumber-1; i >= 0; i--) {
-					/* Vérifier s'il y a une place restante dans la colonne */
-					if (!lastChild[i].classList.contains('cell-colored')) {
-
-					/* Indiquer le symbole dans le tableau grâce au dataset de la cellule */
-					let cellCoordonnates = lastChild[i].dataset.cell.split("-");
-					connect4[cellCoordonnates[0]][cellCoordonnates[1]] = players[currentPlayer].symbol;
-
-					/* Vérifier les conditions de victoire */
-					checkWinner();
-
-					/* Colorisation de la cellule et on change de joueur */
-					lastChild[i].classList.add('cell-colored', `${players[currentPlayer].bgColor}`, 'token-placed');
-
-					playerTurn();
-
-					break;
-					} 
+				if (cell1 == cell2 == cell4 && cell1 == players[0].symbol && cell3 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell3);
+					counterAttack = getCounter;
+				} else if (cell1 == cell3 == cell4 && cell1 == players[0].symbol && cell2 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell2);
+					counterAttack = getCounter;
+				} else if(cell1 == cell2 == cell3 && cell1 == players[0].symbol && cell4 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell4);
+					counterAttack = getCounter;
+				} else if (cell2 == cell3 == cell4 && cell2 == players[0].symbol && cell1 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell1);
+					counterAttack = getCounter;
 				}
-				break;
+			}
+		}
+		for(let i = 0; i < rowNumber; i++) {
+			for (let j = columnNumber-4; j >= 0; j--) {
+				let cell1 = connect4[j][i];
+				let cell2 = connect4[j+1][i];
+				let cell3 = connect4[j+2][i];
+				let cell4 = connect4[j+3][i];
+
+				if (cell1 == cell2 == cell4 && cell1 == players[0].symbol && cell3 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell3);
+					counterAttack = getCounter;
+				} else if (cell1 == cell3 == cell4 && cell1 == players[0].symbol && cell2 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell2);
+					counterAttack = getCounter;
+				} else if(cell1 == cell2 == cell3 && cell1 == players[0].symbol && cell4 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell4);
+					counterAttack = getCounter;
+				} else if (cell2 == cell3 == cell4 && cell2 == players[0].symbol && cell1 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell1);
+					counterAttack = getCounter;
+				}
+			}
+		}
+		for(let i = rowNumber-3; i >= 0; i--) {
+			for (let j = 0; j < columnNumber-4; j++) {
+				let cell1 = connect4[i][j];
+				let cell2 = connect4[i+1][j+1];
+				let cell3 = connect4[i+2][j+2];
+				let cell4 = connect4[i+3][j+3];
+
+				if (cell1 == cell2 == cell4 && cell1 == players[0].symbol && cell3 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell3);
+					counterAttack = getCounter;
+				} else if (cell1 == cell3 == cell4 && cell1 == players[0].symbol && cell2 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell2);
+					counterAttack = getCounter;
+				} else if(cell1 == cell2 == cell3 && cell1 == players[0].symbol && cell4 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell4);
+					counterAttack = getCounter;
+				} else if (cell2 == cell3 == cell4 && cell2 == players[0].symbol && cell1 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell1);
+					counterAttack = getCounter;
+				}
+			}
+		}
+		for(let i = rowNumber-3; i >= 0; i--) {
+			for (let j = columnNumber-2; j > 2; j--) {
+				let cell1 = connect4[i][j];
+				let cell2 = connect4[i+1][j-1];
+				let cell3 = connect4[i+2][j-2];
+				let cell4 = connect4[i+3][j-3];
+
+				if (cell1 == cell2 == cell4 && cell1 == players[0].symbol && cell3 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell3);
+					counterAttack = getCounter;
+				} else if (cell1 == cell3 == cell4 && cell1 == players[0].symbol && cell2 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell2);
+					counterAttack = getCounter;
+				} else if(cell1 == cell2 == cell3 && cell1 == players[0].symbol && cell4 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell4);
+					counterAttack = getCounter;
+				} else if (cell2 == cell3 == cell4 && cell2 == players[0].symbol && cell1 != players[1].symbol && !counterAttack) {
+					let getCounter = checkCounterAttack(cell1);
+					counterAttack = getCounter;
+				}
+			}
+		}
+
+		/* Si aucune contre-attaque, jouer normalement */
+		if(!counterAttack) {
+			/* Récupérer toutes les colonnes */
+			let randomDiv = document.getElementsByClassName('column-style');
+
+			/* Boucle pour trouver une colonne vide */
+			while (true && !counterAttack && !(currentPlayTurn == limitPlayTurn-1)) {
+				/* Sélection d'une colonne au hasard, sauf pour les premiers tours */
+				let randomizer = randomDiv[Math.floor(Math.random() * randomDiv.length)];
+				if(currentPlayTurn < 7) {
+					randomizer = randomDiv[Math.floor(Math.random() * (4 - 2 + 1)) + 2];
+				}
+				let lastChild = randomizer.childNodes;
+
+				/* On boucle jusqu'à trouver une colonne vide */
+				if(!lastChild[0].classList.contains('cell-colored')) {
+					/* Boucle pour coloriser la première cellule en partant de la fin */
+					for (let i = rowNumber-1; i >= 0; i--) {
+						/* Vérifier s'il y a une place restante dans la colonne */
+						if (!lastChild[i].classList.contains('cell-colored')) {
+							/* Indiquer le symbole dans le tableau grâce au dataset de la cellule */
+							let cellCoordonnates = lastChild[i].dataset.cell.split("-");
+							connect4[cellCoordonnates[0]][cellCoordonnates[1]] = players[currentPlayer].symbol;
+
+							checkWinner();
+
+							lastChild[i].classList.add('cell-colored', `${players[currentPlayer].bgColor}`, 'token-placed');
+							playerTurn();
+
+							break;
+						} 
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -334,17 +470,15 @@ function colorColumnCell(inColumn) {
 			let cellCoordonnates = lastChild[i].dataset.cell.split("-");
 			connect4[cellCoordonnates[0]][cellCoordonnates[1]] = players[currentPlayer].symbol;
 
-			/* Vérifier les conditions de victoire */
 			checkWinner();
 
 			/* Colorisation de la cellule et on change de joueur */
 			lastChild[i].classList.add('cell-colored', `${players[currentPlayer].bgColor}`, 'token-placed');
-
 			playerTurn();
 
 			break;
 		} 
-		/* Sinon la colonne est pleine, rien de ne passe */
+		/* Si la colonne est pleine, rien de ne passe */
 		else if (lastChild[0].classList.contains('cell-colored')) {
 			break;
 		}

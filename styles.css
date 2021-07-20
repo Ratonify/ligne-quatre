@@ -1,3 +1,9 @@
+/* **************
+*  PUISSANCE 4  *
+*   14/7/2021   *
+*  by Ratonify  *
+************** */
+
 /* COMMUN */
 html,body {
 	display: flex;
@@ -98,7 +104,7 @@ body {
 #players-turn-token {
 	margin: auto;
 	width: 76px;
-	height: 76px;
+	height: 75px;
 	background-image: url('token.svg');
 	background-size: cover;
 	border-radius: 50%;
